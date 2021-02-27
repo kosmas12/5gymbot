@@ -64,8 +64,9 @@ class ESR(commands.Cog):
                 print("Now listening to European School Radio")
                 await ctx.send("Now listening to European School Radio")
 
-        #except discord.ClientException as e:
-            #await ctx.send(f"A client exception occured:\n`{e}`")
+        except discord.ClientException as e:
+            #await ctx.send(f"A client exception occured:\n`{e}`") This always happens for some reason, suppress as a workaround
+            print(f"A client exception occured:\n`{e}`")
         except TypeError as e:
             await ctx.send(f"TypeError exception:\n`{e}`")
         except discord.opus.OpusNotLoaded as e:
