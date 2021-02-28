@@ -13,6 +13,11 @@ intents = discord.Intents.all() # Enable all intents (members list, presence inf
 bot = commands.Bot(command_prefix='5gym', intents=intents.all()) # Initialize bot with all intents (permissions)
 
 class ESR(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.connected = False
+        self.voice_client = None
+
     @commands.Cog.listener()
     async def on_ready(self):  # This is called when a connection to Discord is achieved
         today = date.today()  # Get what day it currently is. Needed because bot is meant to run for multiple days in 1 run.
@@ -35,11 +40,6 @@ class ESR(commands.Cog):
             logfile.write(logmsg)
         logfile.close()
 
-    def __init__(self, bot):
-        self.bot = bot
-        self.connected = False
-        self.voice_client = None
-
     @commands.command(name='esr', help="Connect to the ESR and stream audio")
     async def esr(self, ctx):
         guild = ctx.guild
@@ -57,15 +57,14 @@ class ESR(commands.Cog):
         url = 'http://europeanschoolradio.eu:1351/esradio.mp3'
 
         try:
-            while self.connected is True:
-                source = discord.FFmpegPCMAudio(url,
-                                                **FFMPEG_OPTIONS)  # converts the youtube audio source into a source discord can use
-                self.voice_client.play(source)  # play the source
-                print("Now listening to European School Radio")
-                await ctx.send("Now listening to European School Radio")
+            source = discord.FFmpegPCMAudio(url,
+                                            **FFMPEG_OPTIONS)  # converts the youtube audio source into a source discord can use
+            self.voice_client.play(source)  # play the source
+            print("Now listening to European School Radio")
+            await ctx.send("Now listening to European School Radio")
 
         except discord.ClientException as e:
-            #await ctx.send(f"A client exception occured:\n`{e}`") This always happens for some reason, suppress as a workaround
+            await ctx.send(f"A client exception occured:\n`{e}`") # This always happens for some reason, suppress as a workaround
             print(f"A client exception occured:\n`{e}`")
         except TypeError as e:
             await ctx.send(f"TypeError exception:\n`{e}`")
