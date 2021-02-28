@@ -15,7 +15,6 @@ bot = commands.Bot(command_prefix='5gym', intents=intents.all()) # Initialize bo
 class ESR(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.connected = False
         self.voice_client = None
 
     @commands.Cog.listener()
@@ -52,7 +51,6 @@ class ESR(commands.Cog):
             self.voice_client = await channel.connect()
         else:
             await self.voice_client.move_to(channel)
-        self.connected = True
 
         url = 'http://europeanschoolradio.eu:1351/esradio.mp3'
 
@@ -64,7 +62,7 @@ class ESR(commands.Cog):
             await ctx.send("Now listening to European School Radio")
 
         except discord.ClientException as e:
-            await ctx.send(f"A client exception occured:\n`{e}`") # This always happens for some reason, suppress as a workaround
+            await ctx.send(f"A client exception occured:\n`{e}`")
             print(f"A client exception occured:\n`{e}`")
         except TypeError as e:
             await ctx.send(f"TypeError exception:\n`{e}`")
@@ -75,7 +73,6 @@ class ESR(commands.Cog):
     async def dc(self, ctx):
         await self.bot.voice_clients[0].disconnect()
         self.bot.voice_clients[0] = None
-        self.connected = False
 
 bot.add_cog(ESR(bot))
 bot.run(token)
