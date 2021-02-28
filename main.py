@@ -56,7 +56,7 @@ class ESR(commands.Cog):
 
         try:
             source = discord.FFmpegPCMAudio(url,
-                                            **FFMPEG_OPTIONS)  # converts the youtube audio source into a source discord can use
+                                            **FFMPEG_OPTIONS)  # converts the ESR audio source into a source discord can use
             self.voice_client.play(source)  # play the source
             print("Now listening to European School Radio")
             await ctx.send("Now listening to European School Radio")
